@@ -20,6 +20,7 @@ public class PermissionsApply {
     private String negativeButton = "取消";
     private String psitiveButton = "确定";
     private boolean needGotoSetting = false;// 是否显示跳转到应用权限设置界面
+    private boolean isSucceedCallback = false;//是否是所有权限申请成功才回调
     //    private boolean runIgnorePermission = false;//是否无视权限，程序正常往下走
     private OnListener mOnListener;//回调接口
 
@@ -66,6 +67,11 @@ public class PermissionsApply {
         return this;
     }
 
+    public PermissionsApply setSucceedCallback(boolean succeedCallback) {
+        isSucceedCallback = succeedCallback;
+        return this;
+    }
+
     /**
      * 发起申请权限，必须调用当前方法，否则权限申请不会有任何反馈
      */
@@ -92,7 +98,12 @@ public class PermissionsApply {
 
             @Override
             public void permissionDenied(String[] permissions) {
-                listener(permissions);
+                if (isSucceedCallback) {
+                    if ((permissions == null || permissions.length == 0))
+                        listener(permissions);
+                } else {
+                    listener(permissions);
+                }
             }
         });
     }
