@@ -21,7 +21,6 @@ public class PermissionsApply {
     private String psitiveButton = "确定";
     private boolean needGotoSetting = false;// 是否显示跳转到应用权限设置界面
     private boolean isSucceedCallback = false;//是否是所有权限申请成功才回调
-    //    private boolean runIgnorePermission = false;//是否无视权限，程序正常往下走
     private OnListener mOnListener;//回调接口
 
     private PermissionsApply() {
