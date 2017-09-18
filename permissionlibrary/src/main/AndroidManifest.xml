@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.junwu.permission">
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".ShowPermissionActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+
+    </application>
+</manifest>
