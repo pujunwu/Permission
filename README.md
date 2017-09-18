@@ -1,4 +1,3 @@
-<div class="span6 preview" style="max-height: 1280px; min-height: 1280px;"><h1 class="title mousetrap">无标题文章</h1><div class="content mousetrap"><h1>Permission</h1>
 <p>权限申请</p>
 <h1>使用方式如下：</h1>
 <pre class="hljs undefined"><code>PermissionsApply.getPermissionsApply(
