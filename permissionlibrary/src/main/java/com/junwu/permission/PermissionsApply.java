@@ -22,6 +22,8 @@ public class PermissionsApply {
     private boolean needGotoSetting = false;// 是否显示跳转到应用权限设置界面
     private boolean isSucceedCallback = false;//是否是所有权限申请成功才回调
     private OnListener mOnListener;//回调接口
+    //提示框提示内容，支撑可改变
+    //布局可自定义
 
     private PermissionsApply() {
     }
