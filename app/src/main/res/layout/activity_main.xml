@@ -5,13 +5,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    tools:context="com.junwu.permission.MainActivity">
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tvText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onClickListener"
-        android:text="申请权限"/>
+        android:padding="10dp"
+        android:text="申请SDCard权限"/>
+
+    <TextView
+        android:id="@+id/tvText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickListener2"
+        android:padding="10dp"
+        android:text="申请相机权限"/>
+
+    <TextView
+        android:id="@+id/tvText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickListener3"
+        android:padding="10dp"
+        android:text="申请WIFI权限"/>
 
 </LinearLayout>

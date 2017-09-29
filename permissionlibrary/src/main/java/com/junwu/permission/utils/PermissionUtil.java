@@ -9,6 +9,7 @@ import android.provider.Settings;
 import android.support.v4.content.PermissionChecker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by adminstrators on 2017/4/11.
