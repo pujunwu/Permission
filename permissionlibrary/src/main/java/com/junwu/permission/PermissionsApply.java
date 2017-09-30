@@ -17,7 +17,7 @@ public class PermissionsApply {
 
     //权限申请参数类
     private PermissionParam mParam;
-    private Callback.OnPermissionCallbackListener mOnListener;//回调接口
+    private Callback.OnPermissionCallbackListener mOnPermissionCallbackListener;//回调接口
     private Callback.OnSuccessErrorListener mSuccessErrorListener;//回调接口
     //显示框回调接口，如果设置了，在需要提示用户是否进入系统权限管理界面时会调用此接口
     //如果需要自定义提示框，可在onShowRationale方法中完成，用户点击确定或取消时调用OnCallbackListener此接口即可
@@ -33,8 +33,8 @@ public class PermissionsApply {
         this.mParam = mParam;
     }
 
-    public PermissionsApply setOnListener(Callback.OnPermissionCallbackListener onListener) {
-        mOnListener = onListener;
+    public PermissionsApply setOnPermissionCallbackListener(Callback.OnPermissionCallbackListener onListener) {
+        mOnPermissionCallbackListener = onListener;
         return this;
     }
 
@@ -93,8 +93,8 @@ public class PermissionsApply {
      * @param permissions 没有申请到的权限列表
      */
     private void listener(String[] permissions) {
-        if (mOnListener != null) {
-            mOnListener.onCallback(permissions);
+        if (mOnPermissionCallbackListener != null) {
+            mOnPermissionCallbackListener.onCallback(permissions);
         } else if (mSuccessErrorListener != null) {
             if (permissions == null) {
                 mSuccessErrorListener.onSuccess();

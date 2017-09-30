@@ -24,20 +24,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickListener(View view) {
 //        Toast.makeText(this, ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA) + "", Toast.LENGTH_SHORT).show();
-//        PermissionParam.getParamSDCard()//申请sdCard操作权限
-//                .setShowDialog(true)//如果进入系统权限管理界面后，权限还未获取成功，就提示是否提示重新获取
-//                .getPermissionsApply()
-//                .setOnListener(new Callback.OnPermissionCallbackListener() {
-//                    @Override
-//                    public void onCallback(String[] permissions) {
-//                        permissions(permissions);
-//                    }
-//                }).apply();
-
-        PermissionParam.getParam()
+        PermissionParam.getParamSDCard()//申请sdCard操作权限
+                .setShowDialog(true)//如果进入系统权限管理界面后，权限还未获取成功，就提示是否提示重新获取
                 .getPermissionsApply()
-                .apply();
-
+                .setOnPermissionCallbackListener(new Callback.OnPermissionCallbackListener() {
+                    @Override
+                    public void onCallback(String[] permissions) {
+                        permissions(permissions);
+                    }
+                }).apply();
     }
 
     public void onClickListener2(View view) {
