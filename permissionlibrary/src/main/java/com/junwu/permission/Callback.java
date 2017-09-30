@@ -10,10 +10,12 @@ package com.junwu.permission;
  */
 public class Callback {
 
-
-    /********************************权限申请完成回调***********************************/
     //处理结束回调接口
     private static OnPermissionListener sOnPermissionListener = null;
+    //显示提示框回调接口,如果为空则显示默认提示框
+    private static OnShowRationaleListener sOnShowRationaleListener = null;
+
+    /********************************权限申请完成回调***********************************/
 
     static void addOnPermissionListener(String key, OnPermissionListener listener) {
         sOnPermissionListener = listener;
@@ -37,20 +39,18 @@ public class Callback {
 
     /********************************显示提示框回调************************************/
 
-    private static OnShowRationaleListene sOnShowRationaleListene;
-
-    static void addOnShowRationaleListene(String key, OnShowRationaleListene listener) {
-        sOnShowRationaleListene = listener;
+    static void addOnShowRationaleListener(String key, OnShowRationaleListener listener) {
+        sOnShowRationaleListener = listener;
     }
 
-    static OnShowRationaleListene getOnShowRationaleListene(String key) {
-        return sOnShowRationaleListene;
+    static OnShowRationaleListener getOnShowRationaleListener(String key) {
+        return sOnShowRationaleListener;
     }
 
     /**
      * 显示提示框
      */
-    public interface OnShowRationaleListene {
+    public interface OnShowRationaleListener {
         /**
          * 显示提示框
          *

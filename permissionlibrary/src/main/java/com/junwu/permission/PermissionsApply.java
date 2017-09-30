@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.junwu.permission.utils.ContextUtil;
+import com.junwu.permission.utils.DI;
 
 /**
  * ===============================
@@ -21,7 +22,7 @@ public class PermissionsApply {
     //显示框回调接口，如果设置了，在需要提示用户是否进入系统权限管理界面时会调用此接口
     //如果需要自定义提示框，可在onShowRationale方法中完成，用户点击确定或取消时调用OnCallbackListener此接口即可
     //如果不设置则根据needGotoSetting参数判断显示出默认提示框
-    private Callback.OnShowRationaleListene mOnShowRationaleListene;
+    private Callback.OnShowRationaleListener mOnShowRationaleListener;
 
     /**
      * 构造函数，只能在当前包可见
@@ -37,8 +38,8 @@ public class PermissionsApply {
         return this;
     }
 
-    public PermissionsApply setOnShowRationaleListene(Callback.OnShowRationaleListene onShowRationaleListene) {
-        mOnShowRationaleListene = onShowRationaleListene;
+    public PermissionsApply setOnShowRationaleListener(Callback.OnShowRationaleListener onShowRationaleListener) {
+        mOnShowRationaleListener = onShowRationaleListener;
         return this;
     }
 
@@ -52,7 +53,7 @@ public class PermissionsApply {
      */
     public void apply() {
         if (mParam == null) {
-            Log.d("PermissionsApp", "申请权限参数为空");
+            Log.d("PermissionsApp", "申请权限参数为空" + new DI().funLog(2));
             return;
         }
         Context context = mParam.mContext;
@@ -60,12 +61,12 @@ public class PermissionsApply {
             context = ContextUtil.getContext();
         }
         if (context == null) {
-            Log.d("PermissionsApp", "context不能为空，请调用setContext()或者ApplicationUtil.setApplication()方法设置context");
+            Log.d("PermissionsApp", "context不能为空，请调用setContext()或者ApplicationUtil.setApplication()方法设置context()" + new DI().funLog(2));
             listener(mParam.permissions);
             return;
         }
         if (mParam.permissions == null || mParam.permissions.length == 0) {
-            Log.d("PermissionsApp", "没有需要申请的权限，请调用setPermissions()方法设置需要申请的权限");
+            Log.d("PermissionsApp", "没有需要申请的权限，请调用setPermissions()方法设置需要申请的权限" + new DI().funLog(2));
             listener(null);
             return;
         }
@@ -77,8 +78,8 @@ public class PermissionsApply {
                 listener(permissions);
             }
         });
-        if (mOnShowRationaleListene != null) {
-            Callback.addOnShowRationaleListene(this.toString(), mOnShowRationaleListene);
+        if (mOnShowRationaleListener != null) {
+            Callback.addOnShowRationaleListener(this.toString(), mOnShowRationaleListener);
         }
         //启动申请权限
         ShowPermissionActivity.start(context, mParam.permissions, mParam.title, mParam.message,
@@ -101,6 +102,10 @@ public class PermissionsApply {
                 mSuccessErrorListener.onError(permissions);
             }
         }
+    }
+
+    private String getLog(int lin) {
+        return "\ncom.junwu.permission.PermissionsApply:(PermissionsApply.java:" + lin + ")";
     }
 
 //    /**

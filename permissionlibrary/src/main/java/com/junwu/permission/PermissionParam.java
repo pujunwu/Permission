@@ -17,7 +17,7 @@ public class PermissionParam {
     String message = "为了应用可以正常使用，请您点击确认申请权限。";
     String negativeButton = "取消";
     String psitiveButton = "确定";
-//    boolean needGotoSetting = false;// 如果权限申请有失败的，判断是否跳转到权限设置界面
+    //    boolean needGotoSetting = false;// 如果权限申请有失败的，判断是否跳转到权限设置界面
     boolean isShowDialog = false;//如果进入系统权限管理界面后，权限还未获取成功，就提示是否提示重新获取
 
     public PermissionParam setContext(Context context) {
@@ -105,6 +105,10 @@ public class PermissionParam {
                 .setPermissions(Manifest.permission.CAMERA,
                         Manifest.permission.RECORD_AUDIO,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    private static PermissionParam getParam(String... permissions) {
+        return new PermissionParam().setPermissions(permissions);
     }
 
     //更多权限组说明：http://blog.csdn.net/koma025/article/details/52913511
