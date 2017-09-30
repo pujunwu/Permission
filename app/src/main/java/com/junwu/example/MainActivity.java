@@ -80,8 +80,7 @@ public class MainActivity extends AppCompatActivity {
                                         dialog.dismiss();
                                         listener.onPsitive();
                                     }
-                                }).create()
-                                .show();
+                                }).create().show();
                     }
                 })
                 .setOnSuccessErrorListener(new Callback.OnSuccessErrorListener() {

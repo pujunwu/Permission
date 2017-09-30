@@ -273,6 +273,23 @@ public class ShowPermissionActivity extends Activity {
             return;
         }
         permissionTypes[2] = "";
+//        Intent localIntent = new Intent();
+//        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        if (Build.VERSION.SDK_INT >= 9) {
+//            localIntent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+//        } else if (Build.VERSION.SDK_INT <= 8) {
+//            localIntent.setAction(Intent.ACTION_VIEW);
+//            localIntent.setClassName("com.android.settings",Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+//            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+//        }
+//        try {
+//            startActivityForResult(localIntent, REQ_CODE_REQUEST_SETTING);
+//        } catch (ActivityNotFoundException e) {
+//            e.printStackTrace();
+//            //调用申请权限失败
+//            permissionDenied(getDeniedPermissions(this, this.permissions));
+//        }
         try {
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, REQ_CODE_REQUEST_SETTING);
