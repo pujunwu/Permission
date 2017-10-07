@@ -20,7 +20,7 @@
                     }
                 }).apply();
 </code></pre>
-更多调用请看:https://github.com/pujunwu/Permission/blob/master/app/src/main/java/com/junwu/example/MainActivity.java
+更多调用请看:<br />https://github.com/pujunwu/Permission/blob/master/app/src/main/java/com/junwu/example/MainActivity.java
 <h1>参数说明</h1>
 <pre class="hljs undefined"><code>Context mContext;//上下文，可选
     String[] permissions;//需要申请的权限
