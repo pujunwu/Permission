@@ -1,29 +1,36 @@
 <p>权限申请</p>
 <h1>使用方式如下：</h1>
-<pre class="hljs undefined"><code>PermissionsApply.getPermissionsApply(
-            Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .setNeedGotoSetting(false)
-            .setOnListener(new PermissionsApply.OnListener() {
-                @Override
-                public void callback(String[] permissions) {
-                    if (permissions == null) {
-                        Toast.makeText(MainActivity.this, "所有权限已经申请成功", Toast.LENGTH_SHORT).show();
-                        return;
+<pre class="hljs undefined"><code>PermissionParam.getParam()
+                .setPermissions(
+                        Manifest.permission.CAMERA,//相机
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,//sdCard权限
+                        Manifest.permission.SYSTEM_ALERT_WINDOW,//允许在其他应用上层显示权限
+                        Manifest.permission.WRITE_SETTINGS)//修改系统设置权限
+                .setShowDialog(true)
+                .getPermissionsApply()
+                .setOnSuccessErrorListener(new Callback.OnSuccessErrorListener() {
+                    @Override
+                    public void onSuccess() {
+                        permissions(null);
                     }
-                    Toast.makeText(MainActivity.this, "未申请成功的权限如下：", Toast.LENGTH_SHORT).show();
-                    //申请权限后操作
-                    for (String per : permissions) {
-                        Toast.makeText(MainActivity.this, per, Toast.LENGTH_SHORT).show();
+
+                    @Override
+                    public void onError(String[] permissions) {
+                        permissions(permissions);
                     }
-                }
-            }).apply();
+                }).apply();
 </code></pre>
+更多调用请看:https://github.com/pujunwu/Permission/blob/master/app/src/main/java/com/junwu/example/MainActivity.java
 <h1>参数说明</h1>
-<pre class="hljs undefined"><code>private Context mContext;
-private String[] permissions;//需要申请的权限
-private String title = "权限提示";
-private String message = "为了应用可以正常使用，请您点击确认申请权限。";
-private String negativeButton = "取消";
-private String psitiveButton = "确定";
-private boolean needGotoSetting = false;// 是否显示跳转到应用权限设置界面</code></pre></div></div>
+<pre class="hljs undefined"><code>Context mContext;//上下文，可选
+    String[] permissions;//需要申请的权限
+    String title = "权限提示";
+    String message = "为了应用可以正常使用，请您点击确认申请权限。";
+    String negativeButton = "取消";
+    String psitiveButton = "确定";
+    boolean isShowDialog = false;//如果进入系统权限管理界面后，权限还未获取成功，就提示是否提示重新获取</code></pre>
+    提示用户需要获取权限的对话框可以完全自定义，回调事件：
+    <code>PermissionParam.getParamWifi()
+                .setShowDialog(true)
+                .getPermissionsApply()
+                .setOnShowRationaleListener</code>
