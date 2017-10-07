@@ -30,7 +30,7 @@
     String psitiveButton = "确定";
     boolean isShowDialog = false;//如果进入系统权限管理界面后，权限还未获取成功，就提示是否提示重新获取</code></pre>
     提示用户需要获取权限的对话框可以完全自定义，回调事件：
-    <code>PermissionParam.getParamWifi()
+    <pre class="hljs undefined"><code>PermissionParam.getParamWifi()
                 .setShowDialog(true)
                 .getPermissionsApply()
-                .setOnShowRationaleListener</code>
+                .setOnShowRationaleListener</pre></code>
