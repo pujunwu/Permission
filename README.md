@@ -35,12 +35,14 @@
                 .getPermissionsApply()
                 .setOnShowRationaleListener</pre></code>
 <p>引用</p>
+<pre class="hljs undefined"><code>
 allprojects {
 		repositories {
-			...
+			
 			maven { url 'https://jitpack.io' }
 		}
 	}
   
   compile 'com.github.pujunwu:Permission:v0.2.3'
+  </code></pre>
   
