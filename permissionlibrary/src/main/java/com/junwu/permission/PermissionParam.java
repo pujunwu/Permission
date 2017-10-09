@@ -18,7 +18,7 @@ public class PermissionParam {
     String message = "为了应用可以正常使用，请您点击确认申请权限。";
     String negativeButton = "取消";
     String psitiveButton = "确定";
-    boolean isShowDialog = false;//如果进入系统权限管理界面后，权限还未获取成功，就提示是否提示重新获取
+    boolean isShowDialog = false;//用户勾选了不再提示，导致以后无法申请权限，如果设置为true就可提示用户再次申请权限
 
     public PermissionParam setContext(Context context) {
         mContext = context;
