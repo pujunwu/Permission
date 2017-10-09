@@ -32,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onCallback(String[] permissions) {
                         permissions(permissions);
                     }
-                }).apply();
+                }).request();
     }
 
     public void onClickListener2(View view) {
-        PermissionParam.getParamSDCard()
+        PermissionParam.getParamCamera()
                 .setShowDialog(true)
                 .getPermissionsApply()
                 .setOnSuccessErrorListener(new Callback.OnSuccessErrorListener() {
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(String[] permissions) {
                         permissions(permissions);
                     }
-                }).apply();
+                }).request();
     }
 
     /**
@@ -58,12 +58,12 @@ public class MainActivity extends AppCompatActivity {
      * setShowDialog(true)但是没有设置setOnShowRationaleListene()会弹出默认提示框
      */
     public void onClickListener3(View view) {
-        PermissionParam.getParamWifi()
+        PermissionParam.getParamVideo()
                 .setShowDialog(true)
                 .getPermissionsApply()
                 .setOnShowRationaleListener(new Callback.OnShowRationaleListener() {
                     @Override
-                    public void onShowRationale(final Callback.OnCallbackListener listener) {
+                    public void onShowRationale(String[] deniedPermissions, final Callback.OnCallbackListener listener) {
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("权限申请")
                                 .setMessage("为了应用可以正常使用，请您点击确认申请权限。")
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(String[] permissions) {
                         permissions(permissions);
                     }
-                }).apply();
+                }).request();
     }
 
     public void onClickListener4(View view) {
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(String[] permissions) {
                         permissions(permissions);
                     }
-                }).apply();
+                }).request();
     }
 
     private void permissions(String[] permissions) {

@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:onClick="onClickListener3"
         android:padding="10dp"
-        android:text="申请WIFI权限"/>
+        android:text="申请录像权限"/>
 
     <TextView
         android:id="@+id/tvText4"
