@@ -34,3 +34,13 @@
                 .setShowDialog(true)
                 .getPermissionsApply()
                 .setOnShowRationaleListener</pre></code>
+<p>引用</p>
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+  
+  compile 'com.github.pujunwu:Permission:v0.2.3'
+  
