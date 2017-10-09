@@ -56,7 +56,7 @@ public class Callback {
          *
          * @param listener 回调接口
          */
-        void onShowRationale(OnCallbackListener listener);
+        void onShowRationale(String[] deniedPermissions,OnCallbackListener listener);
     }
 
     /********************************提示框按钮点击回调************************************/

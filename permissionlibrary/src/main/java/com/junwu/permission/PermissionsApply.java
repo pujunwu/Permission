@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.junwu.permission.utils.ContextUtil;
 import com.junwu.permission.utils.DI;
+import com.junwu.permission.utils.PermissionUtil;
 
 /**
  * ===============================
@@ -51,7 +52,11 @@ public class PermissionsApply {
     /**
      * 发起申请权限，必须调用当前方法，否则权限申请不会有任何反馈
      */
-    public void apply() {
+    public void request() {
+        if (!PermissionUtil.isNeedPermission()) {
+            listener(null);
+            return;
+        }
         if (mParam == null) {
             Log.d("PermissionsApp", "申请权限参数为空" + new DI().funLog(2));
             return;
@@ -70,7 +75,6 @@ public class PermissionsApply {
             listener(null);
             return;
         }
-
         //设置回调接口
         Callback.addOnPermissionListener(this.toString(), new Callback.OnPermissionListener() {
             @Override
@@ -102,10 +106,6 @@ public class PermissionsApply {
                 mSuccessErrorListener.onError(permissions);
             }
         }
-    }
-
-    private String getLog(int lin) {
-        return "\ncom.junwu.permission.PermissionsApply:(PermissionsApply.java:" + lin + ")";
     }
 
 //    /**

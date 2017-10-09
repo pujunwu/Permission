@@ -129,6 +129,24 @@ public class ShowPermissionActivity extends Activity {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             return;
         }
+        if (isShowDialog) {
+            ArrayList<String> deniedPermissions = getDeniedPermissions(this, this.permissions);
+            if (deniedPermissions == null || deniedPermissions.isEmpty()) {
+                //所有权限请求成功
+                permissionGranted();
+                return;
+            }
+            for (String permission : deniedPermissions) {
+                boolean rationale = this.shouldShowRequestPermissionRationale(permission);
+                if (!rationale) {
+                    permissionTypes = getShowRequestPermission(deniedPermissions);
+                    permissionTypes[3] = "";//取消申请权限
+                    permissionTypes[2] = "true";//跳转到权限设置界面
+                    showRationaleMessage(deniedPermissions);
+                    return;
+                }
+            }
+        }
         checkPermissions();
     }
 
@@ -146,10 +164,11 @@ public class ShowPermissionActivity extends Activity {
             //第一次申请权限还未完成
             return;
         }
-        if (!isShowDialog) {//提示用户需要如下权限
+        if (!isShowDialog) {//如果设置为不提示
             permissionDenied(deniedPermissions);
             return;
         }
+
         permissionTypes = getShowRequestPermission(deniedPermissions);
         showRationaleMessage(deniedPermissions);
     }
@@ -158,17 +177,14 @@ public class ShowPermissionActivity extends Activity {
      * 显示申请权限说明
      */
     private void showRationaleMessage(final ArrayList<String> deniedPermissions) {
-        if (!isShowDialog) {//如果设置为不提示
-            permissionDenied(deniedPermissions);
-            return;
-        }
         tipCount++;
         if (tipCount > 1) {
             permissionDenied(deniedPermissions);
             return;
         }
         if (mOnShowRationaleListener != null) {
-            mOnShowRationaleListener.onShowRationale(new Callback.OnCallbackListener() {
+            String[] strings = new String[deniedPermissions.size()];
+            mOnShowRationaleListener.onShowRationale(deniedPermissions.toArray(strings), new Callback.OnCallbackListener() {
                 @Override
                 public void onNegative() {
                     permissionDenied(deniedPermissions);
@@ -197,8 +213,7 @@ public class ShowPermissionActivity extends Activity {
                         dialog.dismiss();
                         isRequestPermissions(deniedPermissions);
                     }
-                }).create()
-                .show();
+                }).create().show();
     }
 
     /**
