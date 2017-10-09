@@ -18,7 +18,7 @@
                     public void onError(String[] permissions) {
                         permissions(permissions);
                     }
-                }).apply();
+                }).request();
 </code></pre>
 更多调用请看:<br />https://github.com/pujunwu/Permission/blob/master/app/src/main/java/com/junwu/example/MainActivity.java
 <h1>参数说明</h1>
@@ -28,9 +28,9 @@
     String message = "为了应用可以正常使用，请您点击确认申请权限。";
     String negativeButton = "取消";
     String psitiveButton = "确定";
-    boolean isShowDialog = false;//如果进入系统权限管理界面后，权限还未获取成功，就提示是否提示重新获取</code></pre>
+    boolean isShowDialog = false;//用户勾选了不再提示，导致以后无法申请权限，如果设置为true就可提示用户再次申请权限</code></pre>
     提示用户需要获取权限的对话框可以完全自定义，回调事件：
-    <pre class="hljs undefined"><code>PermissionParam.getParamWifi()
+    <pre class="hljs undefined"><code>PermissionParam.getParamVideo()
                 .setShowDialog(true)
                 .getPermissionsApply()
                 .setOnShowRationaleListener</pre></code>
