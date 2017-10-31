@@ -19,6 +19,7 @@ import android.text.TextUtils;
 
 import java.util.ArrayList;
 
+import static android.R.attr.data;
 import static com.junwu.permission.utils.PermissionUtil.getDeniedPermissions;
 
 /**
@@ -98,6 +99,14 @@ public class ShowPermissionActivity extends Activity {
         if (deniedPermissions != null && !deniedPermissions.isEmpty()) {
             //判断权限类型
             permissionTypes = getShowRequestPermission(deniedPermissions);
+            if (getPermissionFalse(permissionTypes)) {
+                if (isShowDialog) {
+                    permissionTypes[3] = "";//取消申请权限
+                    permissionTypes[2] = "true";//跳转到权限设置界面
+                    showRationaleMessage(deniedPermissions, permissionTypes);
+                }
+                return;
+            }
             //发起第一次申请完成，要permissionTypes里面的类型都申请一遍才算完成
             requestPermissions(deniedPermissions, permissionTypes);
         } else {
@@ -142,7 +151,7 @@ public class ShowPermissionActivity extends Activity {
                     permissionTypes = getShowRequestPermission(deniedPermissions);
                     permissionTypes[3] = "";//取消申请权限
                     permissionTypes[2] = "true";//跳转到权限设置界面
-                    showRationaleMessage(deniedPermissions);
+                    showRationaleMessage(deniedPermissions, permissionTypes);
                     return;
                 }
             }
@@ -169,14 +178,14 @@ public class ShowPermissionActivity extends Activity {
             return;
         }
 
-        permissionTypes = getShowRequestPermission(deniedPermissions);
-        showRationaleMessage(deniedPermissions);
+        String[] permissionTypes = getShowRequestPermission(deniedPermissions);
+        showRationaleMessage(deniedPermissions, permissionTypes);
     }
 
     /**
      * 显示申请权限说明
      */
-    private void showRationaleMessage(final ArrayList<String> deniedPermissions) {
+    private void showRationaleMessage(final ArrayList<String> deniedPermissions, final String[] permissionTypes) {
         tipCount++;
         if (tipCount > 1) {
             permissionDenied(deniedPermissions);
@@ -192,7 +201,7 @@ public class ShowPermissionActivity extends Activity {
 
                 @Override
                 public void onPsitive() {
-                    isRequestPermissions(deniedPermissions);
+                    isRequestPermissions(deniedPermissions, permissionTypes);
                 }
             });
             return;
@@ -211,7 +220,7 @@ public class ShowPermissionActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        isRequestPermissions(deniedPermissions);
+                        isRequestPermissions(deniedPermissions, permissionTypes);
                     }
                 }).create().show();
     }
@@ -219,7 +228,7 @@ public class ShowPermissionActivity extends Activity {
     /**
      * 权限申请判断
      */
-    private void isRequestPermissions(ArrayList<String> deniedPermissions) {
+    private void isRequestPermissions(ArrayList<String> deniedPermissions, String[] permissionTypes) {
         if (getPermissionType(permissionTypes, "true")) {
             gotoSetting(permissionTypes);
             return;
@@ -335,9 +344,10 @@ public class ShowPermissionActivity extends Activity {
             } else if (permission.equals(Manifest.permission.WRITE_SETTINGS)) {
                 permissionTypes[1] = Manifest.permission.WRITE_SETTINGS;//判断是否需要申请，修改系统参数权限
             } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                //判断当前权限是否可以在权限设置里面显示
+                //表明用户没有彻底禁止弹出权限请求
                 permissionTypes[2] = "true";
             } else {
+                //表明用户已经彻底禁止弹出权限请求
                 permissionTypes[3] = "false";
             }
         }
@@ -358,6 +368,21 @@ public class ShowPermissionActivity extends Activity {
             }
         }
         return false;
+    }
+
+    /**
+     * 判断是否存在权限类型
+     *
+     * @param permissionTypes 权限类型
+     * @return Boolean 如果permissionTypes只有false返回true，反之返回true
+     */
+    private boolean getPermissionFalse(String[] permissionTypes) {
+        for (String t : permissionTypes) {
+            if (!TextUtils.equals(t, "false")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

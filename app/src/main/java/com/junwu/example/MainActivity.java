@@ -24,7 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickListener(View view) {
 //        Toast.makeText(this, ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA) + "", Toast.LENGTH_SHORT).show();
-        PermissionParam.getParamSDCard()//申请sdCard操作权限
+        PermissionParam.getParam().setPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE)//申请sdCard操作权限
                 .setShowDialog(true)//用户勾选了不再提示，导致以后无法申请权限，如果设置为true就可提示用户再次申请权限
                 .getPermissionsApply()
                 .setOnPermissionCallbackListener(new Callback.OnPermissionCallbackListener() {
