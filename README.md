@@ -43,6 +43,15 @@ allprojects {
 		}
 	}
   
-  compile 'com.github.pujunwu:Permission:v0.2.3'
+  //导入方式1
+  compile 'com.github.pujunwu:Permission:v0.2.4'
+  
+  //导入方式2，
+  compile 'com.android.support:appcompat-v7:26.+'
+    //权限申请
+    compile ('com.github.pujunwu:Permission:v0.2.4'){
+        exclude module: 'appcompat-v7'
+    }
+  
   </code></pre>
   
