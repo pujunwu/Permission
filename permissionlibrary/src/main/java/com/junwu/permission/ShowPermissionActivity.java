@@ -19,7 +19,6 @@ import android.text.TextUtils;
 
 import java.util.ArrayList;
 
-import static android.R.attr.data;
 import static com.junwu.permission.utils.PermissionUtil.getDeniedPermissions;
 
 /**
@@ -96,22 +95,22 @@ public class ShowPermissionActivity extends Activity {
         tipCount = 0;
         //权限申请
         ArrayList<String> deniedPermissions = getDeniedPermissions(this, this.permissions);
-        if (deniedPermissions != null && !deniedPermissions.isEmpty()) {
-            //判断权限类型
-            permissionTypes = getShowRequestPermission(deniedPermissions);
-            if (getPermissionFalse(permissionTypes)) {
-                if (isShowDialog) {
-                    permissionTypes[3] = "";//取消申请权限
-                    permissionTypes[2] = "true";//跳转到权限设置界面
-                    showRationaleMessage(deniedPermissions, permissionTypes);
-                }
-                return;
-            }
-            //发起第一次申请完成，要permissionTypes里面的类型都申请一遍才算完成
-            requestPermissions(deniedPermissions, permissionTypes);
-        } else {
+        if (deniedPermissions == null || deniedPermissions.isEmpty()) {
             permissionGranted();
+            return;
         }
+        //判断权限类型
+        permissionTypes = getShowRequestPermission(deniedPermissions);
+        if (getPermissionFalse(permissionTypes)) {//被用户彻底禁止弹出权限请求
+            if (isShowDialog) {
+                showRationaleMessage(deniedPermissions, permissionTypes);
+            } else {
+                permissionDenied(deniedPermissions);
+            }
+            return;
+        }
+        //发起第一次申请完成，要permissionTypes里面的类型都申请一遍才算完成
+        requestPermissions(deniedPermissions, permissionTypes);
     }
 
     @Override
@@ -138,25 +137,19 @@ public class ShowPermissionActivity extends Activity {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             return;
         }
-        if (isShowDialog) {
-            ArrayList<String> deniedPermissions = getDeniedPermissions(this, this.permissions);
-            if (deniedPermissions == null || deniedPermissions.isEmpty()) {
-                //所有权限请求成功
-                permissionGranted();
-                return;
-            }
-            for (String permission : deniedPermissions) {
-                boolean rationale = this.shouldShowRequestPermissionRationale(permission);
-                if (!rationale) {
-                    permissionTypes = getShowRequestPermission(deniedPermissions);
-                    permissionTypes[3] = "";//取消申请权限
-                    permissionTypes[2] = "true";//跳转到权限设置界面
-                    showRationaleMessage(deniedPermissions, permissionTypes);
-                    return;
-                }
-            }
-        }
         checkPermissions();
+//        if (isShowDialog) {
+//            ArrayList<String> deniedPermissions = getDeniedPermissions(this, this.permissions);
+//            if (deniedPermissions == null || deniedPermissions.isEmpty()) {
+//                //所有权限请求成功
+//                permissionGranted();
+//                return;
+//            }
+//            permissionTypes = getShowRequestPermission(deniedPermissions);
+//            showRationaleMessage(deniedPermissions, permissionTypes);
+//            return;
+//        }
+//        checkPermissions();
     }
 
     /**
@@ -177,8 +170,7 @@ public class ShowPermissionActivity extends Activity {
             permissionDenied(deniedPermissions);
             return;
         }
-
-        String[] permissionTypes = getShowRequestPermission(deniedPermissions);
+        permissionTypes = getShowRequestPermission(deniedPermissions);
         showRationaleMessage(deniedPermissions, permissionTypes);
     }
 
@@ -193,7 +185,7 @@ public class ShowPermissionActivity extends Activity {
         }
         if (mOnShowRationaleListener != null) {
             String[] strings = new String[deniedPermissions.size()];
-            mOnShowRationaleListener.onShowRationale(deniedPermissions.toArray(strings), new Callback.OnCallbackListener() {
+            mOnShowRationaleListener.onShowRationale(this, deniedPermissions.toArray(strings), new Callback.OnCallbackListener() {
                 @Override
                 public void onNegative() {
                     permissionDenied(deniedPermissions);
@@ -229,8 +221,8 @@ public class ShowPermissionActivity extends Activity {
      * 权限申请判断
      */
     private void isRequestPermissions(ArrayList<String> deniedPermissions, String[] permissionTypes) {
-        if (getPermissionType(permissionTypes, "true")) {
-            gotoSetting(permissionTypes);
+        if (getPermissionType(permissionTypes, "false")) {
+            gotoSetting(permissionTypes, "false");
             return;
         }
         requestPermissions(deniedPermissions, permissionTypes);
@@ -265,19 +257,19 @@ public class ShowPermissionActivity extends Activity {
         if (needPermissions == null || needPermissions.isEmpty() || arrayIsEmpty(permissionTypes)) {
             return false;
         }
-        if (getPermissionType(permissionTypes, "false")) {
-            permissionTypes[3] = "";
+        if (getPermissionType(permissionTypes, "true")) {
+            setPermissionTypeNull(permissionTypes, "true");
             //其他权限申请
             ActivityCompat.requestPermissions(this, needPermissions.toArray(new String[needPermissions.size()]), REQ_CODE_PERMISSION_REQUEST);
             return true;
         } else if (getPermissionType(permissionTypes, Manifest.permission.WRITE_SETTINGS)) {
             //修改系统设置权限
-            permissionTypes[1] = "";
+            setPermissionTypeNull(permissionTypes, Manifest.permission.WRITE_SETTINGS);
             Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, REQ_CODE_REQUEST_WRITE_SETTING);
             return true;
         } else if (getPermissionType(permissionTypes, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
-            permissionTypes[0] = "";
+            setPermissionTypeNull(permissionTypes, Manifest.permission.SYSTEM_ALERT_WINDOW);
             //允许在其他应用上层显示权限
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, REQ_CODE_REQUEST_SYSTEM_ALERT_WINDOW);
@@ -289,31 +281,11 @@ public class ShowPermissionActivity extends Activity {
     /**
      * 申请权限失败，提示用户进入权限管理界面设置权限
      */
-    private void gotoSetting(String[] permissionTypes) {
+    private void gotoSetting(String[] permissionTypes, String value) {
         if (permissionTypes == null || arrayIsEmpty(permissionTypes)) {
             return;
         }
-        if (!getPermissionType(permissionTypes, "true")) {
-            return;
-        }
-        permissionTypes[2] = "";
-//        Intent localIntent = new Intent();
-//        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        if (Build.VERSION.SDK_INT >= 9) {
-//            localIntent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
-//        } else if (Build.VERSION.SDK_INT <= 8) {
-//            localIntent.setAction(Intent.ACTION_VIEW);
-//            localIntent.setClassName("com.android.settings",Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-//            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
-//        }
-//        try {
-//            startActivityForResult(localIntent, REQ_CODE_REQUEST_SETTING);
-//        } catch (ActivityNotFoundException e) {
-//            e.printStackTrace();
-//            //调用申请权限失败
-//            permissionDenied(getDeniedPermissions(this, this.permissions));
-//        }
+        setPermissionTypeNull(permissionTypes, value);
         try {
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, REQ_CODE_REQUEST_SETTING);
@@ -377,12 +349,27 @@ public class ShowPermissionActivity extends Activity {
      * @return Boolean 如果permissionTypes只有false返回true，反之返回true
      */
     private boolean getPermissionFalse(String[] permissionTypes) {
+        boolean r1 = false, r2 = false;
         for (String t : permissionTypes) {
-            if (!TextUtils.equals(t, "false")) {
-                return false;
+            if (t == null) {
+                continue;
+            }
+            if (TextUtils.equals(t, "false")) {
+                r1 = true;
+            } else {
+                r2 = true;
             }
         }
-        return true;
+        return !r2 && r1;
+    }
+
+    private void setPermissionTypeNull(String[] permissionTypes, String value) {
+        for (int i = 0, len = permissionTypes.length; i < len; i++) {
+            if (TextUtils.equals(permissionTypes[i], value)) {
+                permissionTypes[i] = "";
+            }
+        }
+
     }
 
     /**

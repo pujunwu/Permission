@@ -21,7 +21,7 @@
     <!--修改系统参数权限-->
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <!--用于进行网络定位-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>

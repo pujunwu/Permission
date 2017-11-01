@@ -1,5 +1,7 @@
 package com.junwu.permission;
 
+import android.content.Context;
+
 /**
  * ===============================
  * 描    述：回调相关处理
@@ -56,7 +58,7 @@ public class Callback {
          *
          * @param listener 回调接口
          */
-        void onShowRationale(String[] deniedPermissions,OnCallbackListener listener);
+        void onShowRationale(Context context, String[] deniedPermissions, OnCallbackListener listener);
     }
 
     /********************************提示框按钮点击回调************************************/

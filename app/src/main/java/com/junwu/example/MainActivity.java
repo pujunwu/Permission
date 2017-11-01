@@ -1,6 +1,7 @@
 package com.junwu.example;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 .getPermissionsApply()
                 .setOnShowRationaleListener(new Callback.OnShowRationaleListener() {
                     @Override
-                    public void onShowRationale(String[] deniedPermissions, final Callback.OnCallbackListener listener) {
-                        new AlertDialog.Builder(MainActivity.this)
+                    public void onShowRationale(Context context, String[] deniedPermissions, final Callback.OnCallbackListener listener) {
+                        new AlertDialog.Builder(context)
                                 .setTitle("权限申请")
                                 .setMessage("为了应用可以正常使用，请您点击确认申请权限。")
                                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
