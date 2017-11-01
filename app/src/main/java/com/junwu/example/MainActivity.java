@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 .setOnShowRationaleListener(new Callback.OnShowRationaleListener() {
                     @Override
                     public void onShowRationale(Context context, String[] deniedPermissions, final Callback.OnCallbackListener listener) {
+                        //注意context,是使用传入的context
                         new AlertDialog.Builder(context)
                                 .setTitle("权限申请")
                                 .setMessage("为了应用可以正常使用，请您点击确认申请权限。")
