@@ -18,7 +18,7 @@
                     public void onError(String[] permissions) {
                         permissions(permissions);
                     }
-                }).request();
+                }).execute();
 </code></pre>
 更多调用请看:<br />https://github.com/pujunwu/Permission/blob/master/app/src/main/java/com/junwu/example/MainActivity.java
 <h1>参数说明</h1>
