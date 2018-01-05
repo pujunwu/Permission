@@ -6,7 +6,7 @@
         android:supportsRtl="true">
 
         <activity
-            android:name=".ShowPermissionActivity"
+            android:name=".PermissionApplicationActivity"
             android:theme="@style/Theme.AppCompat.Dialog"/>
 
     </application>

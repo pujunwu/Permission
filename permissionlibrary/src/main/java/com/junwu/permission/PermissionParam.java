@@ -3,22 +3,63 @@ package com.junwu.permission;
 import android.Manifest;
 import android.content.Context;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.security.PublicKey;
 
 /**
  * ===============================
- * 描    述：申请权限参数配置
+ * 描    述：
  * 作    者：pjw
- * 创建日期：2017/9/29 10:16
+ * 创建日期：2018/1/5 11:06
  * ===============================
  */
-public class PermissionParam {
-    Context mContext;//上下文，可选
+public class PermissionParam implements Parcelable {
+
     String[] permissions;//需要申请的权限
     String title = "权限提示";
     String message = "为了应用可以正常使用，请您点击确认申请权限。";
     String negativeButton = "取消";
-    String psitiveButton = "确定";
-    boolean isShowDialog = false;//用户勾选了不再提示，导致以后无法申请权限，如果设置为true就可提示用户再次申请权限
+    String positiveButton = "确定";
+    boolean isPermissionsPrompt = false;//用户勾选了不再提示，导致以后无法申请权限，如果设置为true就可提示用户再次申请权限
+    Context mContext;//当前上下文
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeArray(permissions);
+        dest.writeString(title);
+        dest.writeString(message);
+        dest.writeString(negativeButton);
+        dest.writeString(positiveButton);
+        dest.writeInt(isPermissionsPrompt ? 1 : 0);
+    }
+
+    protected PermissionParam(Parcel in) {
+        permissions = in.createStringArray();
+        title = in.readString();
+        message = in.readString();
+        negativeButton = in.readString();
+        positiveButton = in.readString();
+        isPermissionsPrompt = in.readInt() != 0;
+    }
+
+    public static final Creator<PermissionParam> CREATOR = new Creator<PermissionParam>() {
+        @Override
+        public PermissionParam createFromParcel(Parcel in) {
+            return new PermissionParam(in);
+        }
+
+        @Override
+        public PermissionParam[] newArray(int size) {
+            return new PermissionParam[size];
+        }
+    };
 
     public PermissionParam setContext(Context context) {
         mContext = context;
@@ -45,19 +86,24 @@ public class PermissionParam {
         return this;
     }
 
-    public PermissionParam setPsitiveButton(String psitiveButton) {
-        this.psitiveButton = psitiveButton;
+    public PermissionParam setPositiveButton(String positiveButton) {
+        this.positiveButton = positiveButton;
         return this;
     }
 
-    public PermissionParam setShowDialog(boolean showDialog) {
-        isShowDialog = showDialog;
+    public boolean isPermissionsPrompt() {
+        return isPermissionsPrompt;
+    }
+
+    public PermissionParam setPermissionsPrompt(boolean permissionsPrompt) {
+        isPermissionsPrompt = permissionsPrompt;
         return this;
     }
+
 
     /****************************获取PermissionsApply对象**************************/
 
-    private PermissionParam() {
+    public PermissionParam() {
     }
 
     public PermissionsApply getPermissionsApply() {
@@ -211,5 +257,4 @@ public class PermissionParam {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE};
         }
     }
-
 }

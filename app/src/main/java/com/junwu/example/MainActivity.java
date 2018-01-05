@@ -24,25 +24,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickListener(View view) {
-//        Toast.makeText(this, ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA) + "", Toast.LENGTH_SHORT).show();
-        PermissionParam.getParam().setPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.READ_PHONE_STATE)//申请sdCard操作权限
-                .setShowDialog(true)//用户勾选了不再提示，导致以后无法申请权限，如果设置为true就可提示用户再次申请权限
+//        ActivityCompat.requestPermissions(this, new String[]{
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//        }, PermissionApplicationActivity.REQ_CODE_PERMISSION_REQUEST);
+//
+//        Toast.makeText(this, ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) + "", Toast.LENGTH_SHORT).show();
+        PermissionParam.getParam()
+                .setPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE)//申请sdCard操作权限
+                .setPermissionsPrompt(true)//用户勾选了不再提示，导致以后无法申请权限，如果设置为true就可提示用户再次申请权限
                 .getPermissionsApply()
-                .setOnPermissionCallbackListener(new Callback.OnPermissionCallbackListener() {
+                .setOnCallbackListener(new Callback.OnPermissionCallbackListener() {
                     @Override
                     public void onCallback(String[] permissions) {
                         permissions(permissions);
                     }
-                }).request();
+                }).execute();
     }
 
     public void onClickListener2(View view) {
         PermissionParam.getParamCamera()
-                .setShowDialog(true)
+                .setPermissionsPrompt(true)
                 .getPermissionsApply()
                 .setOnSuccessErrorListener(new Callback.OnSuccessErrorListener() {
                     @Override
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(String[] permissions) {
                         permissions(permissions);
                     }
-                }).request();
+                }).execute();
     }
 
     /**
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickListener3(View view) {
         PermissionParam.getParamVideo()
-                .setShowDialog(true)
+                .setPermissionsPrompt(true)
                 .getPermissionsApply()
                 .setOnShowRationaleListener(new Callback.OnShowRationaleListener() {
                     @Override
@@ -99,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(String[] permissions) {
                         permissions(permissions);
                     }
-                }).request();
+                }).execute();
     }
 
     public void onClickListener4(View view) {
@@ -109,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,//sdCard权限
                         Manifest.permission.SYSTEM_ALERT_WINDOW,//允许在其他应用上层显示权限
                         Manifest.permission.WRITE_SETTINGS)//修改系统设置权限
-                .setShowDialog(true)
+                .setPermissionsPrompt(true)
                 .getPermissionsApply()
                 .setOnSuccessErrorListener(new Callback.OnSuccessErrorListener() {
                     @Override
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(String[] permissions) {
                         permissions(permissions);
                     }
-                }).request();
+                }).execute();
     }
 
     private void permissions(String[] permissions) {

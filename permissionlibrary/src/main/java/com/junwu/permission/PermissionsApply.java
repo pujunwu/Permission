@@ -30,20 +30,38 @@ public class PermissionsApply {
      *
      * @param mParam 权限申请参数
      */
-    PermissionsApply(PermissionParam mParam) {
+    public PermissionsApply(PermissionParam mParam) {
         this.mParam = mParam;
     }
 
-    public PermissionsApply setOnPermissionCallbackListener(Callback.OnPermissionCallbackListener onListener) {
+    /**
+     * 设置回调接口，优先级高于Callback.OnSuccessErrorListener
+     *
+     * @param onListener 回调接口
+     * @return 当前对象
+     */
+    public PermissionsApply setOnCallbackListener(Callback.OnPermissionCallbackListener onListener) {
         mOnPermissionCallbackListener = onListener;
         return this;
     }
 
+    /**
+     * 设置提示是否再次获取权限对话框
+     *
+     * @param onShowRationaleListener 回调接口
+     * @return 当前对象
+     */
     public PermissionsApply setOnShowRationaleListener(Callback.OnShowRationaleListener onShowRationaleListener) {
         mOnShowRationaleListener = onShowRationaleListener;
         return this;
     }
 
+    /**
+     * 设置回调接口，优先级低于Callback.OnPermissionCallbackListener
+     *
+     * @param successErrorListener 回调接口
+     * @return 当前对象
+     */
     public PermissionsApply setOnSuccessErrorListener(Callback.OnSuccessErrorListener successErrorListener) {
         mSuccessErrorListener = successErrorListener;
         return this;
@@ -52,7 +70,7 @@ public class PermissionsApply {
     /**
      * 发起申请权限，必须调用当前方法，否则权限申请不会有任何反馈
      */
-    public void request() {
+    public void execute() {
         if (!PermissionUtil.isNeedPermission()) {
             listener(null);
             return;
@@ -76,19 +94,17 @@ public class PermissionsApply {
             return;
         }
         //设置回调接口
-        Callback.addOnPermissionListener(this.toString(), new Callback.OnPermissionListener() {
+        Callback.addOnPermissionListener(new Callback.OnPermissionListener() {
             @Override
             public void onCallback(String[] permissions) {
                 listener(permissions);
             }
         });
         if (mOnShowRationaleListener != null) {
-            Callback.addOnShowRationaleListener(this.toString(), mOnShowRationaleListener);
+            Callback.addOnShowRationaleListener(mOnShowRationaleListener);
         }
         //启动申请权限
-        ShowPermissionActivity.start(context, mParam.permissions, mParam.title, mParam.message,
-                mParam.negativeButton, mParam.psitiveButton,
-                mParam.isShowDialog, this.toString());
+        PermissionApplicationActivity.startToActivity(context, mParam);
     }
 
     /**

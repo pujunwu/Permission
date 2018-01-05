@@ -19,11 +19,11 @@ public class Callback {
 
     /********************************权限申请完成回调***********************************/
 
-    static void addOnPermissionListener(String key, OnPermissionListener listener) {
+    static void addOnPermissionListener(OnPermissionListener listener) {
         sOnPermissionListener = listener;
     }
 
-    static OnPermissionListener getOnPermissionListener(String key) {
+    static OnPermissionListener getOnPermissionListener() {
         return sOnPermissionListener;
     }
 
@@ -41,11 +41,11 @@ public class Callback {
 
     /********************************显示提示框回调************************************/
 
-    static void addOnShowRationaleListener(String key, OnShowRationaleListener listener) {
+    static void addOnShowRationaleListener(OnShowRationaleListener listener) {
         sOnShowRationaleListener = listener;
     }
 
-    static OnShowRationaleListener getOnShowRationaleListener(String key) {
+    static OnShowRationaleListener getOnShowRationaleListener() {
         return sOnShowRationaleListener;
     }
 
