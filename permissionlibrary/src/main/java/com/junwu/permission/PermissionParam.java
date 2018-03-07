@@ -6,8 +6,6 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.security.PublicKey;
-
 /**
  * ===============================
  * 描    述：

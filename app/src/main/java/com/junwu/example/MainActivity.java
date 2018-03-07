@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 //        ActivityCompat.requestPermissions(this, new String[]{
 //                Manifest.permission.WRITE_EXTERNAL_STORAGE
 //        }, PermissionApplicationActivity.REQ_CODE_PERMISSION_REQUEST);
-//
 //        Toast.makeText(this, ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) + "", Toast.LENGTH_SHORT).show();
         PermissionParam.getParam()
                 .setPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
